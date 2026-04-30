@@ -1,52 +1,48 @@
 "use client";
 import { useState } from "react";
 
-export default function Page() {
+export default function Home() {
   const [input, setInput] = useState("");
   const [response, setResponse] = useState("");
 
-  async function send() {
-    const res = await fetch("/api/chat", {
+  const askAI = async () => {
+    if (!input) return;
+
+    const res = await fetch("/api/ask", {
       method: "POST",
-      body: JSON.stringify({ message: input }),
+      body: JSON.stringify({ prompt: input }),
     });
 
     const data = await res.json();
-    setResponse(data.reply);
-  }
+    setResponse(data.text);
+  };
 
   return (
-    <div className="page">
+    <main className="min-h-screen flex flex-col items-center justify-center bg-[#0f1115] text-white px-4">
 
       {/* LOGO */}
-      <div className="logo">
-        <span className="g">G</span>
-        <span className="s">S</span>
-        <span className="a">A</span>
-      </div>
-      <div className="tagline">Your Study Agent</div>
+      <h1 className="text-6xl font-semibold mb-10 bg-gradient-to-r from-blue-500 via-red-500 to-green-400 bg-clip-text text-transparent">
+        Study Agent
+      </h1>
 
-      {/* SEARCH BAR */}
-      <div className="search">
+      {/* INPUT BOX */}
+      <div className="w-full max-w-2xl relative">
         <input
           value={input}
           onChange={(e) => setInput(e.target.value)}
-          placeholder="Ask anything. Your AI study partner..."
+          onKeyDown={(e) => e.key === "Enter" && askAI()}
+          placeholder="Ask anything..."
+          className="w-full px-6 py-4 rounded-full bg-[#1a1c22] border border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 text-lg shadow-lg"
         />
-        <button onClick={send}>✨</button>
-      </div>
-
-      {/* QUICK BUTTONS */}
-      <div className="actions">
-        <button onClick={() => setInput("Explain a topic")}>Explain</button>
-        <button onClick={() => setInput("Summarize notes")}>Summarize</button>
-        <button onClick={() => setInput("Solve problem")}>Solve</button>
-        <button onClick={() => setInput("Make study plan")}>Plan</button>
       </div>
 
       {/* RESPONSE */}
-      <div className="response">{response}</div>
+      {response && (
+        <div className="mt-8 max-w-2xl w-full bg-[#1a1c22] p-6 rounded-xl border border-gray-700 shadow-lg">
+          {response}
+        </div>
+      )}
 
-    </div>
+    </main>
   );
 }
