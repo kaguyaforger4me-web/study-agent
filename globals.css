@@ -1,3 +1,8 @@
+@keyframes glow {
+  0% { box-shadow: 0 0 5px #4285F4; }
+  50% { box-shadow: 0 0 20px #4285F4; }
+  100% { box-shadow: 0 0 5px #4285F4; }
+}
 @import "tailwindcss";
 
 :root {
