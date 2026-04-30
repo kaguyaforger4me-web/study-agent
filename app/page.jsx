@@ -16,48 +16,37 @@ export default function Page() {
   }
 
   return (
-    <main style={{
-      height: "100vh",
-      background: "black",
-      color: "white",
-      display: "flex",
-      flexDirection: "column",
-      alignItems: "center",
-      justifyContent: "center"
-    }}>
-      
-      <h1 style={{
-        fontSize: "60px",
-        background: "linear-gradient(90deg,#4285F4,#EA4335,#FBBC05,#34A853)",
-        WebkitBackgroundClip: "text",
-        color: "transparent"
-      }}>
-        Study Agent
-      </h1>
+    <div className="page">
 
-      <input
-        value={input}
-        onChange={(e) => setInput(e.target.value)}
-        placeholder="Ask anything..."
-        style={{
-          marginTop: "20px",
-          padding: "15px",
-          width: "400px",
-          borderRadius: "30px",
-          border: "1px solid #333",
-          background: "#111",
-          color: "white"
-        }}
-      />
+      {/* LOGO */}
+      <div className="logo">
+        <span className="g">G</span>
+        <span className="s">S</span>
+        <span className="a">A</span>
+      </div>
+      <div className="tagline">Your Study Agent</div>
 
-      <button onClick={send} style={{ marginTop: "15px" }}>
-        Ask AI
-      </button>
+      {/* SEARCH BAR */}
+      <div className="search">
+        <input
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+          placeholder="Ask anything. Your AI study partner..."
+        />
+        <button onClick={send}>✨</button>
+      </div>
 
-      <p style={{ marginTop: "30px", maxWidth: "600px" }}>
-        {response}
-      </p>
+      {/* QUICK BUTTONS */}
+      <div className="actions">
+        <button onClick={() => setInput("Explain a topic")}>Explain</button>
+        <button onClick={() => setInput("Summarize notes")}>Summarize</button>
+        <button onClick={() => setInput("Solve problem")}>Solve</button>
+        <button onClick={() => setInput("Make study plan")}>Plan</button>
+      </div>
 
-    </main>
+      {/* RESPONSE */}
+      <div className="response">{response}</div>
+
+    </div>
   );
 }
