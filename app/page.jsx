@@ -21,13 +21,11 @@ export default function Home() {
 
       const data = await res.json();
 
-      const aiMessage = {
-        role: "ai",
-        text: data.text || "⚠️ No response from AI",
-      };
-
-      setMessages((prev) => [...prev, aiMessage]);
-    } catch (err) {
+      setMessages((prev) => [
+        ...prev,
+        { role: "ai", text: data.text || "⚠️ No response" },
+      ]);
+    } catch {
       setMessages((prev) => [
         ...prev,
         { role: "ai", text: "⚠️ API error" },
@@ -43,7 +41,7 @@ export default function Home() {
     <main className="h-screen flex flex-col bg-[#0f1115] text-white">
 
       {/* HEADER */}
-      <div className="p-4 text-center text-2xl font-semibold border-b border-gray-800">
+      <div className="p-4 text-center text-xl font-semibold border-b border-gray-800">
         <span className="bg-gradient-to-r from-blue-500 via-red-500 to-green-400 bg-clip-text text-transparent">
           Study Agent
         </span>
@@ -84,7 +82,7 @@ export default function Home() {
 
         <button
           onClick={askAI}
-          className="px-5 py-2 rounded-full bg-blue-600 hover:bg-blue-500"
+          className="px-5 py-2 rounded-full bg-blue-600"
         >
           Send
         </button>
