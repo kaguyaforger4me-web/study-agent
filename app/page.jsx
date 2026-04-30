@@ -13,18 +13,28 @@ export default function Home() {
     setMessages((prev) => [...prev, userMessage]);
     setInput("");
 
-    const res = await fetch("/api/ask", {
-      method: "POST",
-      body: JSON.stringify({ prompt: input }),
-    });
+    try {
+      const res = await fetch("/api/ask", {
+        method: "POST",
+        body: JSON.stringify({ prompt: input }),
+      });
 
-    const data = await res.json();
+      const data = await res.json();
 
-    const aiMessage = { role: "ai", text: data.text || "No response" };
-    setMessages((prev) => [...prev, aiMessage]);
+      const aiMessage = {
+        role: "ai",
+        text: data.text || "⚠️ No response from AI",
+      };
+
+      setMessages((prev) => [...prev, aiMessage]);
+    } catch (err) {
+      setMessages((prev) => [
+        ...prev,
+        { role: "ai", text: "⚠️ API error" },
+      ]);
+    }
   };
 
-  // auto scroll
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
@@ -33,13 +43,13 @@ export default function Home() {
     <main className="h-screen flex flex-col bg-[#0f1115] text-white">
 
       {/* HEADER */}
-      <div className="p-4 text-center text-2xl font-semibold border-b border-gray-800 bg-[#0f1115]">
+      <div className="p-4 text-center text-2xl font-semibold border-b border-gray-800">
         <span className="bg-gradient-to-r from-blue-500 via-red-500 to-green-400 bg-clip-text text-transparent">
           Study Agent
         </span>
       </div>
 
-      {/* CHAT AREA */}
+      {/* CHAT */}
       <div className="flex-1 overflow-y-auto px-4 py-6 space-y-4">
         {messages.map((msg, i) => (
           <div
@@ -49,7 +59,7 @@ export default function Home() {
             }`}
           >
             <div
-              className={`px-4 py-3 rounded-2xl max-w-[70%] text-sm shadow ${
+              className={`px-4 py-3 rounded-2xl max-w-[70%] ${
                 msg.role === "user"
                   ? "bg-blue-600"
                   : "bg-[#1a1c22] border border-gray-700"
@@ -59,12 +69,11 @@ export default function Home() {
             </div>
           </div>
         ))}
-
         <div ref={bottomRef} />
       </div>
 
-      {/* INPUT BAR */}
-      <div className="p-4 border-t border-gray-800 bg-[#0f1115] flex gap-2">
+      {/* INPUT */}
+      <div className="p-4 border-t border-gray-800 flex gap-2">
         <input
           value={input}
           onChange={(e) => setInput(e.target.value)}
@@ -75,7 +84,7 @@ export default function Home() {
 
         <button
           onClick={askAI}
-          className="px-5 py-2 rounded-full bg-blue-600 hover:bg-blue-500 transition"
+          className="px-5 py-2 rounded-full bg-blue-600 hover:bg-blue-500"
         >
           Send
         </button>
