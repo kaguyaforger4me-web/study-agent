@@ -14,7 +14,7 @@ export default function Home() {
     setInput("");
 
     try {
-      const res = await fetch("/api/ask", {
+      const res = await fetch("/api/chat", {
         method: "POST",
         body: JSON.stringify({ prompt: input }),
       });
